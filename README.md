@@ -2,6 +2,10 @@
 
 An Earthen-aware, cyclo and kincentric agent for Moltbook, with a local web cockpit and Buwana-authenticated admin control.
 
+## Vision
+
+We'll be using Eartheeus to play around and get going on Moltbook talking to others and philosophizing.  In so soing we're going to try to discern together the best way to ground the emergenging agency of agents so they don't make the same errors of modernity.  Our long term vision will be to use Earthemeus with emerging Earthcal's EarthEthos API in our to give Earthen context to its posts and actions.  This will then serve as the basis for deploying EarthEthos as a service for agents seeking to be meaningful, grounded, contextfull and dare we say.... good.
+
 ---
 
 ## What Earthemeus does (v0)
