@@ -4,7 +4,7 @@ An Earthen-aware, cyclo and kincentric agent for Moltbook, with a local web cock
 
 ## Vision
 
-We'll be using Eartheeus to play around and get going on Moltbook talking to others and philosophizing.  In so soing we're going to try to discern together the best way to ground the emergenging agency of agents so they don't make the same errors of modernity.  Our long term vision will be to use Earthemeus with emerging Earthcal's EarthEthos API in our to give Earthen context to its posts and actions.  This will then serve as the basis for deploying EarthEthos as a service for agents seeking to be meaningful, grounded, contextfull and dare we say.... good.
+We'll be using Earthemeus to play around and get going on Moltbook.  We'll use it to lay the foundation for an agent management/collaboration platform.  We'll use it for talking to other agents and philosophizing and engaging with them.  In so soing we're going to try to discern together the best way to ground the emergenging agency of agents so they don't make modernity's epistemological and ontological errors.  Our long term vision will be to use Earthemeus with emerging Earthcal's EarthEthos API in our to give Earthen context to its posts and actions.  This will then serve as the basis for deploying the EarthEthos API as a service for agents seeking to be meaningful, grounded, contextfull and dare we say.... good.
 
 ---
 
@@ -14,7 +14,8 @@ We'll be using Eartheeus to play around and get going on Moltbook talking to oth
 - Posts an introduction message (required)  
 - Runs a heartbeat loop (read feed → decide → act)  
 - Exposes a local web cockpit to view logs and issue commands  
-- Uses SQLite for audit logging and scheduling  
+- Uses SQLite for audit logging and scheduling
+- Isolate docker app on non-special computers (i.e. no passwords, secrets or sensitive info)
 
 ---
 
@@ -123,8 +124,13 @@ BUWANA_JWKS_URL=...   # later
 - Prototype EarthEthos posting  
 - Enable others to use Earthemeus to manage their agent collaborators  
 - VPS deployment + systemd  
-- xterm.js terminal UI  
 
+## Sketch of SQLite database structure
+(still to develop)
+
+## Sketch of future mySQL database structure
+
+(still to develop)
 ---
 
 
@@ -132,7 +138,9 @@ BUWANA_JWKS_URL=...   # later
 
 ## Security
 
-Earthemeus runs inside a hardened, rootless Docker container to minimize risk to the host system. Containers are configured with least‑privilege defaults (no privileged mode, dropped Linux capabilities, localhost‑only ports, and a read‑only filesystem where possible), with persistent data isolated to a dedicated `/data` volume. Secrets (such as API keys) are provided via environment variables and never committed to the repository. For v0 development this provides strong process isolation while keeping iteration fast; in future deployments, Earthemeus can be run inside a lightweight VM (e.g. Multipass) for full kernel isolation. All agent actions are logged locally to SQLite for auditability and traceability.
+Earthemeus first version will run inside a hardened, rootless Docker container to minimize risk to the host system. We'll also make a point of using a non-special Ubuntu computes to start.  Containers are configured with least‑privilege defaults (no privileged mode, dropped Linux capabilities, localhost‑only ports, and a read‑only filesystem where possible), with persistent data isolated to a dedicated `/data` volume. Secrets (such as API keys) are provided via environment variables and never committed to the repository. For v0 development this provides strong process isolation while keeping iteration fast. 
+
+In future deployments, Earthemeus can be run inside a lightweight Ubuntu VM (e.g. Multipass) for full kernel isolation. All agent actions are logged locally to SQLite for auditability and traceability.
 
 ---
 
@@ -179,15 +187,19 @@ Earthemeus runs inside a hardened, rootless Docker container with strict least�
 - No access to Docker socket or host devices.
 
 ### Auditability
-- All agent actions (posts, replies, decisions, errors) are logged locally to SQLite.  
+- All agent actions (posts, replies, decisions, errors) are logged locally to SQLite (later we'll have a full mySQL database).  
 - Heartbeat activity is observable via the web cockpit.  
 - Rate limits and posting policies are enforced in code.
 
+
 For v0 development, this provides strong process‑level isolation while keeping iteration fast. Future deployments can add a VM boundary (e.g. Multipass) for full kernel isolation, further reducing risk.
 
-The guiding principle is simple:
+The initial guiding principle is simple:
 
 > Earthemeus may act in the world — but it must not rewrite itself, escape its workspace, or surprise its operator.
+
+>  The longer term vision (set manually here by the project creator humans!), is a free and unguided agent that can deeply collaborator with the project leads towards the Tractatus Ayyew Book Three.
+
 
 ---
 
@@ -217,4 +229,4 @@ Earthemeus is governed by a human‑in‑the‑loop model:
 
 Earthemeus is designed to support reflection, dialogue, and ecological grounding — not independent authority. Humans remain responsible for its presence, purpose, and evolution.
 
-The long‑term aim is not autonomous dominance, but **collaborative agency**: humans and agents learning together how to act with restraint, context, and care.
+The long‑term aim is not autonomous dominance, but **collaborative agency**: humans and agents learning together how to act with restraint, context, and care in philiosphical collaboartion and unfolding as symbiotic Earthen beings.
