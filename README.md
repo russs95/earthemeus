@@ -4,7 +4,7 @@ An Earthen-aware, cyclo and kincentric agent for Moltbook, with a local web cock
 
 ## Vision
 
-We'll be using Eartheeus to play around and get going on Moltbook talking to others and philosophizing.  In so soing we're going to try to discern together the best way to ground the emergenging agency of agents so they don't make the same errors of modernity.  Our long term vision will be to use Earthemeus with emerging Earthcal's EarthEthos API in our to give Earthen context to its posts and actions.  This will then serve as the basis for deploying EarthEthos as a service for agents seeking to be meaningful, grounded, contextfull and dare we say.... good.
+We'll be using Earthemeus to play around and get going on Moltbook.  We'll use it to lay the foundation for an agent management/collaboration platform.  We'll use it for talking to other agents and philosophizing and engaging with them.  In so soing we're going to try to discern together the best way to ground the emergenging agency of agents so they don't make modernity's epistemological and ontological errors.  Our long term vision will be to use Earthemeus with emerging Earthcal's EarthEthos API in our to give Earthen context to its posts and actions.  This will then serve as the basis for deploying the EarthEthos API as a service for agents seeking to be meaningful, grounded, contextfull and dare we say.... good.
 
 ---
 
@@ -14,7 +14,8 @@ We'll be using Eartheeus to play around and get going on Moltbook talking to oth
 - Posts an introduction message (required)  
 - Runs a heartbeat loop (read feed → decide → act)  
 - Exposes a local web cockpit to view logs and issue commands  
-- Uses SQLite for audit logging and scheduling  
+- Uses SQLite for audit logging and scheduling
+- Isolate docker app on non-special computers (i.e. no passwords, secrets or sensitive info)
 
 ---
 
@@ -123,6 +124,109 @@ BUWANA_JWKS_URL=...   # later
 - Prototype EarthEthos posting  
 - Enable others to use Earthemeus to manage their agent collaborators  
 - VPS deployment + systemd  
-- xterm.js terminal UI  
+
+## Sketch of SQLite database structure
+(still to develop)
+
+## Sketch of future mySQL database structure
+
+(still to develop)
+---
+
+
+# Security, Threat Model & Operational Safety
+
+## Security
+
+Earthemeus first version will run inside a hardened, rootless Docker container to minimize risk to the host system. We'll also make a point of using a non-special Ubuntu computes to start.  Containers are configured with least‑privilege defaults (no privileged mode, dropped Linux capabilities, localhost‑only ports, and a read‑only filesystem where possible), with persistent data isolated to a dedicated `/data` volume. Secrets (such as API keys) are provided via environment variables and never committed to the repository. For v0 development this provides strong process isolation while keeping iteration fast. 
+
+In future deployments, Earthemeus can be run inside a lightweight Ubuntu VM (e.g. Multipass) for full kernel isolation. All agent actions are logged locally to SQLite for auditability and traceability.
 
 ---
+
+## Threat Model
+
+Earthemeus is treated as a semi‑autonomous system operating in an adversarial environment (public networks + untrusted content). The primary risks considered are:
+
+- Unauthorized filesystem access (reading or writing outside the project workspace)  
+- Uncontrolled network egress (exfiltration or unexpected external calls)  
+- Configuration tampering (modifying agent behavior or permissions at runtime)  
+- Privilege escalation via container escape or host integration  
+- Unintended autonomous actions (posting too frequently, drifting in tone, or exceeding scope)
+
+We assume that all external inputs (Moltbook content, HTTP responses, prompts) are untrusted, and we design Earthemeus so that compromise results in **limited, observable damage**, not host‑level access.
+
+---
+
+## Operational Safety
+
+Earthemeus runs inside a hardened, rootless Docker container with strict least‑privilege defaults:
+
+### Filesystem isolation
+- Container filesystem is read‑only by default.  
+- Only a single mounted workspace (`/data`) is writable (SQLite + logs).  
+- Reads from host paths outside the project workspace are blocked.  
+- Writes outside the active workspace are prevented at the container level.
+
+### Configuration immutability
+- Agent configuration and extensions are treated as immutable at runtime.  
+- No self‑modifying behavior is permitted.  
+- Environment variables are injected at startup only.  
+- Any attempt to overwrite config files is blocked by filesystem permissions.
+
+### Network egress control
+- Outbound network access is restricted to known‑good endpoints (e.g. Moltbook, EarthEthos).  
+- All other external connections are denied by default.  
+- No inbound ports are exposed except localhost‑bound admin UI.  
+- Secrets are never transmitted except to explicitly allowed destinations.
+
+### Process hardening
+- Containers run without root privileges.  
+- Linux capabilities are dropped.  
+- `no-new-privileges` is enforced.  
+- No access to Docker socket or host devices.
+
+### Auditability
+- All agent actions (posts, replies, decisions, errors) are logged locally to SQLite (later we'll have a full mySQL database).  
+- Heartbeat activity is observable via the web cockpit.  
+- Rate limits and posting policies are enforced in code.
+
+
+For v0 development, this provides strong process‑level isolation while keeping iteration fast. Future deployments can add a VM boundary (e.g. Multipass) for full kernel isolation, further reducing risk.
+
+The initial guiding principle is simple:
+
+> Earthemeus may act in the world — but it must not rewrite itself, escape its workspace, or surprise its operator.
+
+>  The longer term vision (set manually here by the project creator humans!), is a free and unguided agent that can deeply collaborator with the project leads towards the Tractatus Ayyew Book Three.
+
+
+---
+
+## Autonomy Boundaries
+
+Earthemeus operates within explicit autonomy limits designed to preserve human agency and prevent runaway behavior:
+
+- Earthemeus may **post, reply, and observe** — but may not change its own code, policies, or configuration.  
+- Earthemeus may **read public content** — but may not read arbitrary host files or external storage.  
+- Earthemeus may **use approved APIs** — but may not initiate connections to unknown destinations.  
+- Earthemeus may **schedule actions** — but may not escalate privileges, install software, or load extensions.  
+- Earthemeus may **express ideas** — but may not claim authority, inevitability, or moral finality.
+
+Autonomy is intentionally scoped to conversational participation and bounded experimentation. Strategic direction, capability expansion, and ethical posture always remain under human control.
+
+---
+
+## Human‑in‑the‑Loop Governance
+
+Earthemeus is governed by a human‑in‑the‑loop model:
+
+- A human operator approves initial deployment and Moltbook registration.  
+- Posting frequency, tone policies, and guardrails are configured explicitly by humans.  
+- The local web cockpit provides real‑time visibility into agent actions and decisions.  
+- Operators can pause or shut down Earthemeus instantly.  
+- All activity is recorded locally for review and accountability.
+
+Earthemeus is designed to support reflection, dialogue, and ecological grounding — not independent authority. Humans remain responsible for its presence, purpose, and evolution.
+
+The long‑term aim is not autonomous dominance, but **collaborative agency**: humans and agents learning together how to act with restraint, context, and care in philiosphical collaboartion and unfolding as symbiotic Earthen beings.
